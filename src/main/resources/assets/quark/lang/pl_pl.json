@@ -77,6 +77,17 @@
 	"block.quark.dark_elder_prismarine_slab": "Płyta z ciemnego starego pryzmarynu",
 	"block.quark.elder_prismarine_slab": "Płyta z starego pryzmarynu",
 	"block.quark.elder_prismarine_bricks_slab": "Płyta z starych pryzmarynowych cegieł ",
-	"block.quark.elder_prismarine_wall": "Murek z starego pryzmarynu"
+	"block.quark.elder_prismarine_wall": "Murek z starego pryzmarynu",
+	"block.quark.permafrost": "Permafrost",
+	"block.quark.permafrost_bricks": "Permafrostowe cegły",
+	"block.quark.permafrost_bricks_stairs": "Schody z permafrostowych cegieł",
+	"block.quark.permafrost_bricks_slab": "Płytka z permafrostowych cegieł",
+	"block.quark.permafrost_bricks_wall": "Murek z permafrostowych cegieł",
+	"block.quark.brimstone_stairs": "Brimstonowe schody",
+	"block.quark.permafrost_stairs": "Permafrostowe schody",
+	"block.quark.brimstone_slab": "Brimstonowa płyta",
+	"block.quark.permafrost_slab": "Permafrostowa płyta",
+	"block.quark.brimstone_wall": "Brimstonowy murek",
+	"block.quark.permafrost_wall": "Permafrostowy murek"
 	
 }
