@@ -66,6 +66,17 @@
 	"block.quark.brimstone_bricks": "Brimstonowe cegły",
 	"block.quark.brimstone_bricks_stairs": "Schody z cegieł brimstonowych",
 	"block.quark.brimstone_bricks_slab": " Płyta z cegieł brimstonowych",
-	"block.quark.brimstone_bricks_wall": "Murek z cegieł brimstonowych"
+	"block.quark.brimstone_bricks_wall": "Murek z cegieł brimstonowych"'
+	"block.quark.dark_elder_prismarine": "Dark Elder Prismarine",
+	"block.quark.elder_prismarine": "Stary pryzmaryn",
+	"block.quark.elder_prismarine_bricks": "Stare pryzmarynowe cegły",
+	"block.quark.elder_sea_lantern": "Stara latarnia morska",
+	"block.quark.dark_elder_prismarine_stairs": "Schody z ciemnego pryzmarynu ",
+	"block.quark.elder_prismarine_stairs": "Schody z starego pryzmarynu",
+	"block.quark.elder_prismarine_bricks_stairs": "Schody z starych pryzmarynowych cegieł ",
+	"block.quark.dark_elder_prismarine_slab": "Płyta z ciemnego starego pryzmarynu",
+	"block.quark.elder_prismarine_slab": "Płyta z starego pryzmarynu",
+	"block.quark.elder_prismarine_bricks_slab": "Płyta z starych pryzmarynowych cegieł ",
+	"block.quark.elder_prismarine_wall": "Murek z starego pryzmarynu"
 	
 }
