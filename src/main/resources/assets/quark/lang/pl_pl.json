@@ -88,6 +88,14 @@
 	"block.quark.brimstone_slab": "Brimstonowa płyta",
 	"block.quark.permafrost_slab": "Permafrostowa płyta",
 	"block.quark.brimstone_wall": "Brimstonowy murek",
-	"block.quark.permafrost_wall": "Permafrostowy murek"
+	"block.quark.permafrost_wall": "Permafrostowy murek",
+	"block.quark.cobbedstone": "Pajęczy bruk",
+	"block.quark.cobbedstone_stairs": "Pajęcze brukowe schody",
+	"block.quark.cobbedstone_slab": "Pajęcze brukowe płytki",
+	"block.quark.cobbedstone_wall": "Pajęczy brukowy murek",
+	"block.quark.glowcelium": "Świecąca grzybnia",
+	"block.quark.glowshroom": "Świecisty grzyb",
+	"block.quark.glowshroom_block": "Blok świecistego grzyba",
+	"block.quark.glowshroom_stem": "Świecista zupa grzybowa"
 	
 }
