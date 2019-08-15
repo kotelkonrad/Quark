@@ -59,8 +59,13 @@
 	"block.quark.birch_trapped_chest": "Brzozowa skrzynia-pułapka",
 	"block.quark.jungle_trapped_chest": "Tropikalna skrzynia-pułapka",
 	"block.quark.acacia_trapped_chest": "Akacjowa skrzynia-pułapka",
-	"block.quark.dark_oak_trapped_chest": "Ciemnodębowa skrzynia-pułapka"	
+	"block.quark.dark_oak_trapped_chest": "Ciemnodębowa skrzynia-pułapka",	
 	"block.quark.blaze_lantern": "Płomykowa latarnia",
-	"block.quark.sugar_cane_block": "Blok trzciny cukrowej"
+	"block.quark.sugar_cane_block": "Blok trzciny cukrowej",
+	"block.quark.brimstone": "Brimstone",
+	"block.quark.brimstone_bricks": "Brimstonowe cegły",
+	"block.quark.brimstone_bricks_stairs": "Schody z cegieł brimstonowych",
+	"block.quark.brimstone_bricks_slab": " Płyta z cegieł brimstonowych",
+	"block.quark.brimstone_bricks_wall": "Murek z cegieł brimstonowych"
 	
 }
