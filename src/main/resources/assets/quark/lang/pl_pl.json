@@ -151,6 +151,13 @@
 	"block.quark.purple_shingles_slab": "Płyta z fioletowych gontów",
 	"block.quark.red_shingles_slab": "Płyta z czerwonych gontów",
 	"block.quark.white_shingles_slab": "Płyta z białych gontów",
-	"block.quark.yellow_shingles_slab": "Płyta z żółtych gontów"
+	"block.quark.yellow_shingles_slab": "Płyta z żółtych gontów",
+	"block.quark.iron_rod": "Żelazny słup",
+	"block.quark.green_slime_block": "Zielony blok szlamu",
+	"block.quark.red_slime_block": "Czerwony blok szlamu",
+	"block.quark.blue_slime_block": "Niebieski blok szlamu",
+	"block.quark.cyan_slime_block": "Błękitny blok szlamu",
+	"block.quark.magenta_slime_block": "Karmazynowy blok szlamu",
+	"block.quark.yellow_slime_block": "Żółty blok szlamu"
 	
 }
