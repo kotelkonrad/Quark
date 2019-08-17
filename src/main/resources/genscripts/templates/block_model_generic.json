@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "%modid%:blocks/%name%"
+		"all": "%modid%:block/%name%"
 	}
 }

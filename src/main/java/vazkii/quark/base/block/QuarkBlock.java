@@ -5,11 +5,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import vazkii.arl.block.BasicBlock;
 import vazkii.arl.util.RegistryHelper;
-import vazkii.quark.base.moduleloader.Module;
+import vazkii.quark.base.module.Module;
+
+import java.util.function.Supplier;
 
 public class QuarkBlock extends BasicBlock {
 	
 	private final Module module;
+	private Supplier<Boolean> enabledSupplier = () -> true; 
 
 	public QuarkBlock(String regname, Module module, ItemGroup creativeTab, Properties properties) {
 		super(regname, properties);
@@ -25,8 +28,13 @@ public class QuarkBlock extends BasicBlock {
 			super.fillItemGroup(group, items);
 	}
 	
+	public QuarkBlock setCondition(Supplier<Boolean> enabledSupplier) {
+		this.enabledSupplier = enabledSupplier;
+		return this;
+	}
+	
 	public boolean isEnabled() {
-		return module != null && module.enabled;
+		return module != null && module.enabled && enabledSupplier.get();
 	}
 
 }

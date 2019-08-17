@@ -11,10 +11,13 @@ copy([
 
 	('blockstate_wall.json', 'assets/{modid}/blockstates/{name}_wall.json'),
 
-	('recipe_wall.json', 'data/{modid}/recipes/{category}/crafting/walls/{name}_wall.json'),
+	('recipe_wall.json', 'data/{modid}/recipes/{category}/crafting/walls/{name}_wall.json')
 ])
 
 localize((
 	lambda name, modid: 'block.{modid}.{name}_wall'.format(name = name, modid = modid),
 	lambda name, modid: re.sub(r's$', '', localize_name(name, modid)) + ' Wall'
 ))
+
+import update_tags
+import update_drop_tables
