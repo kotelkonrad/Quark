@@ -1,71 +1,60 @@
-/**
- * This class was created by <Vazkii>. It's distributed as
- * part of the Quark Mod. Get the Source Code in github:
- * https://github.com/Vazkii/Quark
- *
- * Quark is Open Source and distributed under the
- * CC-BY-NC-SA 3.0 License: https://creativecommons.org/licenses/by-nc-sa/3.0/deed.en_GB
- *
- * File Created @ [18/03/2016, 21:49:33 (GMT)]
- */
 package vazkii.quark.base.proxy;
 
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
+import java.util.function.Supplier;
+
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.config.ModConfig.ModConfigEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import vazkii.arl.util.ClientTicker;
 import vazkii.quark.base.Quark;
 import vazkii.quark.base.capability.CapabilityHandler;
-import vazkii.quark.base.client.ContributorRewardHandler;
-import vazkii.quark.base.command.CommandConfig;
-import vazkii.quark.base.module.GlobalConfig;
 import vazkii.quark.base.module.ModuleLoader;
-import vazkii.quark.base.network.GuiHandler;
-import vazkii.quark.base.network.MessageRegister;
-import vazkii.quark.base.sounds.QuarkSounds;
-import vazkii.quark.world.feature.DungeonTweaksCompat;
+import vazkii.quark.base.network.QuarkNetwork;
+import vazkii.quark.base.world.WorldGenHandler;
 
 public class CommonProxy {
 
-	public void preInit(FMLPreInitializationEvent event) {
-		CapabilityHandler.register();
-		QuarkSounds.init();
-		ModuleLoader.preInit(event);
-
-		NetworkRegistry.INSTANCE.registerGuiHandler(Quark.instance, new GuiHandler());
-		MessageRegister.init();
-	}
-
-	public void init(FMLInitializationEvent event) {
-		ModuleLoader.init(event);
-		ContributorRewardHandler.init();
-	}
-
-	public void postInit(FMLPostInitializationEvent event) {
-		DungeonTweaksCompat.legacyCheck();
-		DungeonTweaksCompat.registerDungeons();
-		ModuleLoader.postInit(event);
-	}
+	private int lastConfigChange = 0;
 	
-	public void finalInit(FMLPostInitializationEvent event) {
-		ModuleLoader.finalInit(event);
-	}
-
-	public void serverStarting(FMLServerStartingEvent event) {
-		ModuleLoader.serverStarting(event);
+	public void start() {
+		ModuleLoader.INSTANCE.start();
 		
-		if(GlobalConfig.enableConfigCommand)
-			event.registerServerCommand(new CommandConfig());
-	}
-
-	public void doEmote(String playerName, String emoteName, int tier) {
-		// proxy override
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		registerListeners(bus);
 	}
 	
-	public void addResourceOverride(String path, String file) {
-		// proxy override
+	public void registerListeners(IEventBus bus) {
+		bus.addListener(this::setup);
+		bus.addListener(this::loadComplete);
+		bus.addListener(this::configChanged);
+	}
+	
+	public void setup(FMLCommonSetupEvent event) {
+		QuarkNetwork.setup();
+		CapabilityHandler.setup();
+		ModuleLoader.INSTANCE.setup();
+	}
+	
+	public void loadComplete(FMLLoadCompleteEvent event) {
+		ModuleLoader.INSTANCE.loadComplete();
+		WorldGenHandler.loadComplete();
+	}
+	
+	public void configChanged(ModConfigEvent event) {
+		if(event.getConfig().getModId().equals(Quark.MOD_ID) && ClientTicker.ticksInGame - lastConfigChange > 10) { 
+			lastConfigChange = ClientTicker.ticksInGame;
+			handleQuarkConfigChange();
+		}
+	}
+	
+	public void handleQuarkConfigChange() {
+		ModuleLoader.INSTANCE.configChanged();
+	}
+	
+	public void addResourceOverride(String type, String path, String file, Supplier<Boolean> isEnabled) {
+		// NO-OP, client only
 	}
 
-	
 }
