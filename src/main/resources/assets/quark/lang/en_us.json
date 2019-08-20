@@ -8,6 +8,23 @@
 
 	"item.quark.trowel": "Trowel",
 	"item.quark.tallow": "Tallow",
+	"item.quark.black_rune": "Black Rune",
+	"item.quark.blue_rune": "Blue Rune",
+	"item.quark.brown_rune": "Brown Rune",
+	"item.quark.cyan_rune": "Cyan Rune",
+	"item.quark.gray_rune": "Gray Rune",
+	"item.quark.green_rune": "Green Rune",
+	"item.quark.light_blue_rune": "Light Blue Rune",
+	"item.quark.light_gray_rune": "Light Gray Rune",
+	"item.quark.lime_rune": "Lime Rune",
+	"item.quark.magenta_rune": "Magenta Rune",
+	"item.quark.orange_rune": "Orange Rune",
+	"item.quark.pink_rune": "Pink Rune",
+	"item.quark.purple_rune": "Purple Rune",
+	"item.quark.red_rune": "Red Rune",
+	"item.quark.white_rune": "White Rune",
+	"item.quark.yellow_rune": "Yellow Rune",
+	"item.quark.rainbow_rune": "Rainbow Rune",
 
 	"block.quark.charcoal_block": "Charcoal Block",
 	"block.quark.black_quilted_wool": "Black Quilted Wool",
@@ -158,6 +175,12 @@
 	"block.quark.blue_slime_block": "Blue Slime Block",
 	"block.quark.cyan_slime_block": "Cyan Slime Block",
 	"block.quark.magenta_slime_block": "Magenta Slime Block",
-	"block.quark.yellow_slime_block": "Yellow Slime Block"
-		
+	"block.quark.yellow_slime_block": "Yellow Slime Block",
+	"block.quark.sturdy_stone": "Sturdy Stone",
+	"block.quark.oak_bookshelf": "Oak Bookshelf",
+	"block.quark.spruce_bookshelf": "Spruce Bookshelf",
+	"block.quark.birch_bookshelf": "Birch Bookshelf",
+	"block.quark.jungle_bookshelf": "Jungle Bookshelf",
+	"block.quark.acacia_bookshelf": "Acacia Bookshelf",
+	"block.quark.dark_oak_bookshelf": "Dark Oak Bookshelf"
 }
