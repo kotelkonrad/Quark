@@ -40,12 +40,12 @@ public class ColorRunesModule extends Module {
 	public static final String TAG_RUNE_COLOR = Quark.MOD_ID + ":RuneColor";
 
 	private static final ThreadLocal<ItemStack> targetStack = new ThreadLocal<>();
-	private static Tag<Item> runesTag;
+	public static Tag<Item> runesTag;
 
-	@Config public static int dungeonWeight = 20;
-	@Config public static int netherFortressWeight = 15;
-	@Config public static int jungleTempleWeight = 15;
-	@Config public static int desertTempleWeight = 15;
+	@Config public static int dungeonWeight = 10;
+	@Config public static int netherFortressWeight = 8;
+	@Config public static int jungleTempleWeight = 8;
+	@Config public static int desertTempleWeight = 8;
 	@Config public static int itemQuality = 0;
 	@Config public static int applyCost = 15;
 
@@ -87,7 +87,7 @@ public class ColorRunesModule extends Module {
 	}
 
 	@Override
-	public void start() {
+	public void construct() {
 		for(DyeColor color : DyeColor.values()) {
 			float[] components = color.getColorComponentValues();
 			int rgb = 0xFF000000 |
@@ -120,7 +120,10 @@ public class ColorRunesModule extends Module {
 			weight = desertTempleWeight;
 		
 		if(weight > 0) {
-			LootEntry entry = TagLootEntry.func_216176_b(runesTag).weight(weight).quality(itemQuality).func_216081_b();
+			LootEntry entry = TagLootEntry.func_216176_b(runesTag) // withTag
+					.weight(weight)
+					.quality(itemQuality)
+					.build();
 			MiscUtil.addToLootTable(event.getTable(), entry);
 		}
 	}
@@ -129,9 +132,10 @@ public class ColorRunesModule extends Module {
 	public void onAnvilUpdate(AnvilUpdateEvent event) {
 		ItemStack left = event.getLeft();
 		ItemStack right = event.getRight();
+		ItemStack output = event.getOutput();
 
-		if(!left.isEmpty() && !right.isEmpty() && left.isEnchanted() && get(right).isPresent()) {
-			ItemStack out = left.copy();
+		if(!left.isEmpty() && !right.isEmpty() && left.isEnchanted() && right.getItem().isIn(runesTag)) {
+			ItemStack out = (output.isEmpty() ? left : output).copy();
 			ItemNBTHelper.setBoolean(out, TAG_RUNE_ATTACHED, true);
 			ItemNBTHelper.setCompound(out, TAG_RUNE_COLOR, right.serializeNBT());
 			event.setOutput(out);
@@ -140,6 +144,7 @@ public class ColorRunesModule extends Module {
 		}
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	private static LazyOptional<IRuneColorProvider> get(ICapabilityProvider provider) {
 		return provider.getCapability(QuarkCapabilities.RUNE_COLOR);
 	}

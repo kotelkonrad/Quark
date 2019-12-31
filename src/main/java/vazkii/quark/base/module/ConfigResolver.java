@@ -3,21 +3,22 @@ package vazkii.quark.base.module;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
+import vazkii.quark.base.handler.GeneralConfig;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 public class ConfigResolver {
 
-	private final Map<String, ModuleCategory> categories;
 	private final ConfigFlagManager flagManager;
 	
 	private List<Runnable> refreshRunnables = new LinkedList<>();
 	
-	public ConfigResolver(Map<String, ModuleCategory> categories) {
-		this.categories = categories;
+	public ConfigResolver() {
 		this.flagManager = new ConfigFlagManager();
 	}
 	
@@ -32,12 +33,30 @@ public class ConfigResolver {
 	}
 	
 	private Void build(ForgeConfigSpec.Builder builder) {
-		for(String s : categories.keySet()) {
-			ModuleCategory category = categories.get(s);
-			buildCategory(builder, category);
+		builder.push("general");
+		try {
+			ConfigObjectSerializer.serialize(builder, flagManager, refreshRunnables, GeneralConfig.INSTANCE);
+		} catch (ReflectiveOperationException e) {
+			throw new RuntimeException("Failed to create quark general config", e);
 		}
+		builder.pop();
+		
+		builder.push("categories");
+		buildCategoryList(builder);
+		builder.pop();
+		
+		for(ModuleCategory category : ModuleCategory.values())
+			buildCategory(builder, category);
 		
 		return null;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void buildCategoryList(ForgeConfigSpec.Builder builder) { 
+		for(ModuleCategory category : ModuleCategory.values()) {
+			ForgeConfigSpec.ConfigValue<Boolean> value = builder.define(WordUtils.capitalizeFully(category.name), true);
+			refreshRunnables.add(() -> category.enabled = value.get());
+		}
 	}
 	
 	private void buildCategory(ForgeConfigSpec.Builder builder, ModuleCategory category) {
@@ -49,7 +68,7 @@ public class ConfigResolver {
 		for(Module module : modules) {
 			ForgeConfigSpec.ConfigValue<Boolean> value = builder.define(module.displayName, module.enabledByDefault);
 			setEnabledRunnables.put(module, () -> {
-				module.setEnabled(value.get());
+				module.setEnabled(value.get() && category.enabled);
 				flagManager.putEnabledFlag(module);
 			});
 		}
@@ -92,7 +111,7 @@ public class ConfigResolver {
 		
 		builder.comment(descStr);
 		ForgeConfigSpec.ConfigValue<Boolean> value = builder.define("Ignore Anti Overlap", false);
-		refreshRunnables.add(() -> module.ignoreAntiOverlap = value.get());
+		refreshRunnables.add(() -> module.ignoreAntiOverlap = !GeneralConfig.useAntiOverlap || value.get());
 	}
 	
 }

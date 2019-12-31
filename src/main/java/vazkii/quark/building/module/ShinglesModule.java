@@ -14,7 +14,7 @@ import vazkii.quark.base.module.ModuleCategory;
 public class ShinglesModule extends Module {
 
 	@Override
-	public void start() {
+	public void construct() {
 		for(DyeColor dye : DyeColor.values())
 			VariantHandler.addSlabAndStairs(new QuarkBlock(dye.getName() + "_shingles", this, ItemGroup.BUILDING_BLOCKS, Block.Properties.from(Blocks.TERRACOTTA)));
 	}

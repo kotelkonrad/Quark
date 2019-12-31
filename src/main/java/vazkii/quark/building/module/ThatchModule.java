@@ -1,5 +1,6 @@
 package vazkii.quark.building.module;
 
+import net.minecraft.block.ComposterBlock;
 import vazkii.quark.base.handler.VariantHandler;
 import vazkii.quark.base.module.Config;
 import vazkii.quark.base.module.LoadModule;
@@ -10,11 +11,21 @@ import vazkii.quark.building.block.ThatchBlock;
 @LoadModule(category = ModuleCategory.BUILDING)
 public class ThatchModule extends Module {
 
-	@Config public static float fallDamageMultiplier = 0.5F;
+	@Config.Min(0)
+	@Config.Max(1)
+	@Config public static double fallDamageMultiplier = 0.5;
+	
+	public static ThatchBlock thatch;
 	
 	@Override
-	public void start() {
-		VariantHandler.addSlabAndStairs(new ThatchBlock(this));
+	public void construct() {
+		thatch = new ThatchBlock(this);
+		VariantHandler.addSlabAndStairs(thatch);
+	}
+	
+	@Override
+	public void setup() {
+		ComposterBlock.CHANCES.put(thatch, 0.3F);
 	}
 	
 }

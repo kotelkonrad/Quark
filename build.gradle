@@ -35,7 +35,7 @@ minecraft {
     mappings channel: "${config.mapping_channel}", version: "${config.mapping_version}"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
     
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
@@ -82,7 +82,7 @@ repositories {
     }
     maven {
         // for JEI
-        name = "promwml16"
+        name "progwml6"
         url "http://dvs1.progwml6.com/files/maven"
     }
 }
@@ -91,6 +91,9 @@ dependencies {
     minecraft "net.minecraftforge:forge:${config.mc_version}-${config.forge_version}"
 
     compile fg.deobf("vazkii.arl:AutoRegLib:${config.arl_version}")
+
+    compileOnly fg.deobf("mezz.jei:jei-1.14.4:${config.jei_version}:api")
+    runtimeOnly fg.deobf("mezz.jei:jei-1.14.4:${config.jei_version}")
 }
 
 processResources {
@@ -149,7 +152,7 @@ def parseConfig(File config) {
 
 jar {
     //rename the default output, for some better... sanity with scipts
-    archiveName = "${baseName} ${version}.${extension}"
+    archiveName = "${baseName}-${version}.${extension}"
 
      manifest {
         attributes([

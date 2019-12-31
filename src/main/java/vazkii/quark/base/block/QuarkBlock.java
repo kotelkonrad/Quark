@@ -7,12 +7,13 @@ import vazkii.arl.block.BasicBlock;
 import vazkii.arl.util.RegistryHelper;
 import vazkii.quark.base.module.Module;
 
-import java.util.function.Supplier;
+import javax.annotation.Nullable;
+import java.util.function.BooleanSupplier;
 
-public class QuarkBlock extends BasicBlock {
+public class QuarkBlock extends BasicBlock implements IQuarkBlock {
 	
 	private final Module module;
-	private Supplier<Boolean> enabledSupplier = () -> true; 
+	private BooleanSupplier enabledSupplier = () -> true;
 
 	public QuarkBlock(String regname, Module module, ItemGroup creativeTab, Properties properties) {
 		super(regname, properties);
@@ -27,14 +28,22 @@ public class QuarkBlock extends BasicBlock {
 		if(isEnabled() || group == ItemGroup.SEARCH)
 			super.fillItemGroup(group, items);
 	}
-	
-	public QuarkBlock setCondition(Supplier<Boolean> enabledSupplier) {
+
+	@Override
+	public QuarkBlock setCondition(BooleanSupplier enabledSupplier) {
 		this.enabledSupplier = enabledSupplier;
 		return this;
 	}
-	
-	public boolean isEnabled() {
-		return module != null && module.enabled && enabledSupplier.get();
+
+	@Override
+	public boolean doesConditionApply() {
+		return enabledSupplier.getAsBoolean();
+	}
+
+	@Nullable
+	@Override
+	public Module getModule() {
+		return module;
 	}
 
 }

@@ -1,10 +1,6 @@
 package vazkii.quark.client.module;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.color.BlockColors;
@@ -19,6 +15,9 @@ import vazkii.quark.base.module.Config;
 import vazkii.quark.base.module.LoadModule;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.base.module.ModuleCategory;
+
+import java.util.List;
+import java.util.Map;
 
 @LoadModule(category = ModuleCategory.CLIENT)
 public class GreenerGrassModule extends Module {
@@ -58,7 +57,8 @@ public class GreenerGrassModule extends Module {
 	@OnlyIn(Dist.CLIENT)
 	private void registerGreenerColor(Iterable<String> ids, boolean leaves) {
 		BlockColors colors = Minecraft.getInstance().getBlockColors();
-		Map<IRegistryDelegate<Block>, IBlockColor> map = ObfuscationReflectionHelper.getPrivateValue(BlockColors.class, colors, "colors"); // This is a forge field so obfuscation is meaningless
+
+		Map<IRegistryDelegate<Block>, IBlockColor> map = ObfuscationReflectionHelper.getPrivateValue(BlockColors.class, colors, "field_186725_a"); // colors.colors;
 
 		for(String id : ids) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(id));

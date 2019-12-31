@@ -1,6 +1,5 @@
 package vazkii.quark.tweaks.module;
 
-import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
@@ -16,9 +15,13 @@ public class AxeLeafHarvestingModule extends Module {
 
 	@SubscribeEvent
 	public void calcBreakSpeed(BreakSpeed event) {
+		if (event.getOriginalSpeed() <= 0)
+			return;
+
 		ItemStack stack = event.getPlayer().getHeldItem(Hand.MAIN_HAND);
-		if(stack.getItem().getToolTypes(stack).contains(ToolType.AXE) && event.getState().getMaterial() == Material.LEAVES)
-			event.setNewSpeed(stack.getItem().getDestroySpeed(stack, Blocks.OAK_PLANKS.getDefaultState()));
+		if(stack.getItem().getToolTypes(stack).contains(ToolType.AXE) &&
+				event.getState().getMaterial() == Material.LEAVES)
+			event.setNewSpeed(100 * event.getState().getBlockHardness(event.getPlayer().world, event.getPos()));
 	}	
 
 }

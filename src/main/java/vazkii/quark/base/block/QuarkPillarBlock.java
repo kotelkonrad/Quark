@@ -1,7 +1,5 @@
 package vazkii.quark.base.block;
 
-import java.util.function.Supplier;
-
 import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
@@ -9,10 +7,13 @@ import net.minecraft.util.NonNullList;
 import vazkii.arl.util.RegistryHelper;
 import vazkii.quark.base.module.Module;
 
-public class QuarkPillarBlock extends RotatedPillarBlock {
+import javax.annotation.Nullable;
+import java.util.function.BooleanSupplier;
+
+public class QuarkPillarBlock extends RotatedPillarBlock implements IQuarkBlock {
 
 	private final Module module;
-	private Supplier<Boolean> enabledSupplier = () -> true; 
+	private BooleanSupplier enabledSupplier = () -> true;
 
 	public QuarkPillarBlock(String regname, Module module, ItemGroup creativeTab, Properties properties) {
 		super(properties);
@@ -28,15 +29,21 @@ public class QuarkPillarBlock extends RotatedPillarBlock {
 		if(isEnabled() || group == ItemGroup.SEARCH)
 			super.fillItemGroup(group, items);
 	}
-	
-	
-	public QuarkPillarBlock setCondition(Supplier<Boolean> enabledSupplier) {
+
+	@Nullable
+	@Override
+	public Module getModule() {
+		return module;
+	}
+
+	@Override
+	public QuarkPillarBlock setCondition(BooleanSupplier enabledSupplier) {
 		this.enabledSupplier = enabledSupplier;
 		return this;
 	}
-	
-	public boolean isEnabled() {
-		return module != null && module.enabled && enabledSupplier.get();
-	}
 
+	@Override
+	public boolean doesConditionApply() {
+		return enabledSupplier.getAsBoolean();
+	}
 }

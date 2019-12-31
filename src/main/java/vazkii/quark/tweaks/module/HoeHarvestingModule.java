@@ -3,12 +3,15 @@ package vazkii.quark.tweaks.module;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
+import net.minecraft.util.Direction;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockRayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
@@ -16,6 +19,7 @@ import net.minecraftforge.common.PlantType;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import vazkii.quark.base.handler.MiscUtil;
+import vazkii.quark.base.module.Config;
 import vazkii.quark.base.module.LoadModule;
 import vazkii.quark.base.module.Module;
 import vazkii.quark.base.module.ModuleCategory;
@@ -23,7 +27,8 @@ import vazkii.quark.base.module.ModuleCategory;
 @LoadModule(category = ModuleCategory.TWEAKS, hasSubscriptions = true)
 public class HoeHarvestingModule extends Module {
 
-//	@Override public static boolean hoesCanHaveFortune = true; 
+	@Config
+	public static boolean hoesCanHaveFortune = true;
 	
 	public static int getRange(ItemStack hoe) {
 		if(hoe.isEmpty() || !(hoe.getItem() instanceof HoeItem))
@@ -34,9 +39,9 @@ public class HoeHarvestingModule extends Module {
 			return 2;
 	}
 
-//	public static boolean canFortuneApply(Enchantment enchantment, ItemStack stack) {
-//		return enchantment == Enchantments.FORTUNE && hoesCanHaveFortune && !stack.isEmpty() && stack.getItem() instanceof HoeItem;
-//	}
+	public static boolean canFortuneApply(Enchantment enchantment, ItemStack stack) {
+		return enchantment == Enchantments.FORTUNE && hoesCanHaveFortune && !stack.isEmpty() && stack.getItem() instanceof HoeItem;
+	}
 
 	@SubscribeEvent
 	public void onBlockBroken(BlockEvent.BreakEvent event) {
@@ -47,7 +52,7 @@ public class HoeHarvestingModule extends Module {
 		PlayerEntity player = event.getPlayer();
 		BlockPos basePos = event.getPos();
 		ItemStack stack = player.getHeldItemMainhand();
-		if (!stack.isEmpty() && stack.getItem() instanceof HoeItem && canHarvest(world, basePos, event.getState())) {
+		if (!stack.isEmpty() && stack.getItem() instanceof HoeItem && canHarvest(player, world, basePos, event.getState())) {
 			int range = getRange(stack);
 
 			for (int i = 1 - range; i < range; i++)
@@ -57,7 +62,7 @@ public class HoeHarvestingModule extends Module {
 
 					BlockPos pos = basePos.add(i, 0, k);
 					BlockState state = world.getBlockState(pos);
-					if (canHarvest(world, pos, state)) {
+					if (canHarvest(player, world, pos, state)) {
 						Block block = state.getBlock();
 						if (block.canHarvestBlock(state, world, pos, player))
 							block.harvestBlock((World) world, player, pos, state, world.getTileEntity(pos), stack);
@@ -70,7 +75,7 @@ public class HoeHarvestingModule extends Module {
 		}
 	}
 
-	private boolean canHarvest(IWorld world, BlockPos pos, BlockState state) {
+	private boolean canHarvest(PlayerEntity player, IWorld world, BlockPos pos, BlockState state) {
 		Block block = state.getBlock();
 		if(block instanceof IPlantable) {
 			IPlantable plant = (IPlantable) block;
@@ -78,7 +83,8 @@ public class HoeHarvestingModule extends Module {
 			return type != PlantType.Water && type != PlantType.Desert;
 		}
 
-		return state.getMaterial() == Material.PLANTS && state.getMaterial().isReplaceable();
+		return state.getMaterial() == Material.PLANTS && state.isReplaceable(new BlockItemUseContext(new ItemUseContext(player, Hand.MAIN_HAND,
+				new BlockRayTraceResult(new Vec3d(0.5, 0.5, 0.5), Direction.DOWN, pos, false))));
 	}
 
 }

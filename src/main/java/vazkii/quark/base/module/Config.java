@@ -12,7 +12,19 @@ public @interface Config {
 	String name() default "";
 	String description() default "";
 	String flag() default "";
-	double min() default Double.MAX_VALUE;
-	double max() default Double.MIN_VALUE;
+
+	@interface Restriction {
+		String[] value();
+	}
+
+	@interface Min {
+		double value();
+		boolean exclusive() default false;
+	}
+
+	@interface Max {
+		double value();
+		boolean exclusive() default false;
+	}
 	
 }

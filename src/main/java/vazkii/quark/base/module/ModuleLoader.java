@@ -1,18 +1,17 @@
 package vazkii.quark.base.module;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Consumer;
+
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import vazkii.quark.base.Quark;
 
 public final class ModuleLoader {
 	
 	public static final ModuleLoader INSTANCE = new ModuleLoader(); 
 	
-	private Map<String, ModuleCategory> foundCategories = new LinkedHashMap<>();
 	private Map<Class<? extends Module>, Module> foundModules = new HashMap<>();
 	
 	private ConfigResolver config;
@@ -21,19 +20,19 @@ public final class ModuleLoader {
 	
 	public void start() {
 		findModules();
-		dispatch(Module::start);
+		dispatch(Module::construct);
+		dispatch(Module::modulesStarted);
 		resolveConfigSpec();
 	}
 	
 	private void findModules() {
 		ModuleFinder finder = new ModuleFinder();
 		finder.findModules();
-		foundCategories = finder.getFoundCategories();
 		foundModules = finder.getFoundModules();
 	}
 	
 	private void resolveConfigSpec() {
-		config = new ConfigResolver(foundCategories);
+		config = new ConfigResolver();
 		config.makeSpec();
 	}
 	
@@ -41,20 +40,30 @@ public final class ModuleLoader {
 		config.configChanged();
 		dispatch(Module::configChanged);
 	}
-	
-	public void setup() {
-		dispatch(Module::setup);
-		dispatch(Module::modulesLoaded);
+
+	@OnlyIn(Dist.CLIENT)
+	public void configChangedClient() {
+		dispatch(Module::configChangedClient);
 	}
 	
+	public void setup() {
+		dispatch(Module::earlySetup);
+		Quark.proxy.handleQuarkConfigChange();
+		dispatch(Module::setup);
+	}
+
 	@OnlyIn(Dist.CLIENT)
 	public void clientSetup() {
 		dispatch(Module::clientSetup);
 	}
-	
+
+	@OnlyIn(Dist.CLIENT)
+	public void modelRegistry() {
+		dispatch(Module::modelRegistry);
+	}
+
 	public void loadComplete() {
 		dispatch(Module::loadComplete);
-		configChanged();
 	}
 	
 	private void dispatch(Consumer<Module> run) {

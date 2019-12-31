@@ -1,7 +1,5 @@
 package vazkii.quark.world.block;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -18,21 +16,26 @@ import net.minecraft.world.World;
 import net.minecraft.world.lighting.LightEngine;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.common.ToolType;
 import vazkii.quark.base.block.QuarkBlock;
 import vazkii.quark.base.module.Module;
+
+import java.util.Random;
 
 public class GlowceliumBlock extends QuarkBlock {
 
 	public GlowceliumBlock(Module module) {
-		super("glowcelium", module, ItemGroup.BUILDING_BLOCKS, 
+		super("glowcelium", module, ItemGroup.BUILDING_BLOCKS,
 				Block.Properties.create(Material.ORGANIC, MaterialColor.LIGHT_BLUE)
-				.tickRandomly()
-				.hardnessAndResistance(0.2F)
-				.lightValue(7)
-				.sound(SoundType.PLANT));
+						.tickRandomly()
+						.hardnessAndResistance(0.5F)
+						.lightValue(7)
+						.harvestTool(ToolType.SHOVEL)
+						.sound(SoundType.PLANT));
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void tick(BlockState state, World worldIn, BlockPos pos, Random random) {
 		if(!worldIn.isRemote) {
 			if(!canExist(state, worldIn, pos))
@@ -47,16 +50,16 @@ public class GlowceliumBlock extends QuarkBlock {
 
 	// Some vanilla copypasta from SpreadableSnowyDirtBlock
 	
-	private static boolean canExist(BlockState p_220257_0_, IWorldReader p_220257_1_, BlockPos p_220257_2_) {
-		BlockPos blockpos = p_220257_2_.up();
-		BlockState blockstate = p_220257_1_.getBlockState(blockpos);
-		int i = LightEngine.func_215613_a(p_220257_1_, p_220257_0_, p_220257_2_, blockstate, blockpos, Direction.UP, blockstate.getOpacity(p_220257_1_, blockpos));
-		return i < p_220257_1_.getMaxLightLevel();
+	private static boolean canExist(BlockState state, IWorldReader world, BlockPos pos) {
+		BlockPos blockpos = pos.up();
+		BlockState blockstate = world.getBlockState(blockpos);
+		int i = LightEngine.func_215613_a(world, state, pos, blockstate, blockpos, Direction.UP, blockstate.getOpacity(world, blockpos));
+		return i < world.getMaxLightLevel();
 	}
 
-	private static boolean canGrowTo(BlockState p_220256_0_, IWorldReader p_220256_1_, BlockPos p_220256_2_) {
-		BlockPos blockpos = p_220256_2_.up();
-		return canExist(p_220256_0_, p_220256_1_, p_220256_2_) && !p_220256_1_.getFluidState(blockpos).isTagged(FluidTags.WATER);
+	private static boolean canGrowTo(BlockState state, IWorldReader world, BlockPos pos) {
+		BlockPos blockpos = pos.up();
+		return canExist(state, world, pos) && !world.getFluidState(blockpos).isTagged(FluidTags.WATER);
 	}
 
 	@Override
